@@ -1,0 +1,63 @@
+{
+  "database": "finova.db",
+  "domain": "FINOVA Digital Wallet & CBDC Ledger",
+  "version": "1.0.0",
+  "tables": {
+    "users": {
+      "description": "Przechowuje tożsamości użytkowników portfela cyfrowego oraz ich poziomy weryfikacji KYC.",
+      "columns": {
+        "user_id": "Unikalny identyfikator użytkownika (klucz główny).",
+        "name": "Imię i nazwisko użytkownika.",
+        "kyc_level": "Poziom weryfikacji KYC. Dopuszczalne wartości: Tier 1 (Podstawowy), Tier 2 (Rozszerzony), Tier 3 (Pełny KYC dla transakcji CBDC).",
+        "created_at": "Znacznik czasu określający moment rejestracji profilu użytkownika."
+      }
+    },
+    "wallets": {
+      "description": "Konta portfeli cyfrowych powiązane z użytkownikami, przechowujące salda walutowe i CBDC.",
+      "columns": {
+        "wallet_id": "Unikalny adres portfela (hash).",
+        "user_id": "Identyfikator właściciela portfela (relacja do tabeli users).",
+        "balance": "Bieżące saldo portfela. UWAGA: Saldo nigdy nie może spaść poniżej 0.00.",
+        "currency": "Symbol waluty (np. EUR, eEUR dla CBDC, USD) powiązany z tabelą currencies."
+      }
+    },
+    "transactions": {
+      "description": "Rejestr wszystkich transakcji, transferów środków finansowych oraz interakcji z akceptantami.",
+      "columns": {
+        "transaction_id": "Unikalny identyfikator transakcji (klucz główny).",
+        "sender_wallet": "Adres portfela nadawcy (relacja do tabeli wallets).",
+        "receiver_wallet": "Adres portfela odbiorcy (relacja do tabeli wallets).",
+        "amount": "Kwota transakcji (wartość dziesiętna).",
+        "kyc_verified": "Flaga logiczna (TRUE/FALSE) określająca, czy dla tej transakcji pomyślnie wykonano wymagany poziom weryfikacji KYC/AML.",
+        "timestamp": "Znacznik czasu transakcji (moment jej autoryzacji).",
+        "merchant_id": "Identyfikator punktu handlowego, w którym dokonano płatności (relacja do tabeli merchants, dopuszczalna wartość NULL dla transferów P2P)."
+      }
+    },
+    "merchants": {
+      "description": "Rejestr i klasyfikacja akceptantów (punktów handlowo-usługowych) obsługiwanych przez system płatności.",
+      "columns": {
+        "merchant_id": "Unikalny identyfikator akceptanta (klucz główny).",
+        "merchant_name": "Oficjalna lub handlowa nazwa firmy akceptanta.",
+        "merchant_category": "Kod lub kategoria działalności (np. Gaming, Retail, Finance).",
+        "is_high_risk": "Flaga logiczna (TRUE/FALSE) określająca, czy branża lub dany akceptant reprezentuje podwyższone ryzyko nadużyć finansowych (AML Risk)."
+      }
+    },
+    "compliance_rules": {
+      "description": "Tabela konfiguracyjna zawierająca dynamiczne limity kwotowe i reguły AML wdrożone w systemie.",
+      "columns": {
+        "rule_id": "Unikalny kod reguły (np. FIN-AML-07).",
+        "kyc_tier_required": "Wymagany poziom KYC dla danej reguły (np. Tier 2, Tier 3).",
+        "max_transaction_limit": "Maksymalna dozwolona kwota pojedynczej transakcji podlegająca pod tę regułę.",
+        "rule_description": "Opis biznesowy reguły prawnej lub wewnętrznego limitu bezpieczeństwa."
+      }
+    },
+    "currencies": {
+      "description": "Lista wszystkich obsługiwanych konfiguracji walut tradycyjnych (Fiat) oraz walut cyfrowych banków centralnych (CBDC).",
+      "columns": {
+        "currency_code": "Trzyliterowy kod waluty (np. EUR, USD) lub kod dedykowany CBDC (np. eEUR) jako klucz główny.",
+        "currency_name": "Pełna nazwa waluty (np. Digital Euro CBDC, US Dollar).",
+        "is_active": "Flaga logiczna (TRUE/FALSE) określająca, czy waluta jest aktualnie dopuszczona do obrotu w portfelu FINOVA."
+      }
+    }
+  }
+}
