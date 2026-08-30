@@ -163,4 +163,4 @@ In strict compliance with the **IBM TechXchange 2026 Hackathon Rules**:
 
 ## 📝 License
 
-This project is open-source and released under the **MIT License**. It was developed strictly for demonstration, evaluation, and 
+This project is open-source and released under the **MIT License**. It was developed strictly for demonstration, evaluation, and educational purposes as part of the **IBM TechXchange 2026 Pre-conference Dev Day Hackathon**.
